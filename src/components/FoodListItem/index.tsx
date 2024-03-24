@@ -2,12 +2,6 @@ import { View, Text, StyleSheet } from "react-native";
 import React, { FC } from "react";
 import { AntDesign } from "@expo/vector-icons";
 
-export type Item = {
-  label: string;
-  cal: number;
-  brand: string;
-};
-
 type FoodListItemProp = {
   item: Item;
 };
