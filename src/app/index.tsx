@@ -1,12 +1,21 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 import FoodListItem from "../components/FoodListItem";
+import { foodItems } from "../_mockup/data";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <FoodListItem item={{ label: "Pizza", cal: 75, brand: "Dominos" }} />
-      <FoodListItem item={{ label: "Apple", cal: 50, brand: "Generic" }} />
+      <TextInput placeholder="Search...." style={styles.input} />
+      <FlatList
+        data={foodItems}
+        renderItem={({ item }) => (
+          <FoodListItem
+            item={{ label: item.label, cal: item.cal, brand: item.brand }}
+          />
+        )}
+        contentContainerStyle={{ gap: 5 }}
+      />
     </View>
   );
 }
@@ -18,5 +27,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
     gap: 5,
+  },
+  input: {
+    backgroundColor: "#f2f2f2",
+    padding: 10,
+    borderRadius: 20,
   },
 });
