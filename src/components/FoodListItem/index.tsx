@@ -3,16 +3,16 @@ import React, { FC } from "react";
 import { AntDesign } from "@expo/vector-icons";
 
 type FoodListItemProp = {
-  item: Item;
+  item: any;
 };
 
 const FoodListItem: FC<FoodListItemProp> = ({ item }) => {
   return (
     <View style={styles.container}>
       <View style={styles.itemContainer}>
-        <Text style={styles.labelTxt}>{item.label}</Text>
+        <Text style={styles.labelTxt}>{item.food.label}</Text>
         <Text style={styles.descTxt}>
-          {item.cal} cal, {item.brand}
+          {item.food.nutrients.ENERC_KCAL.toFixed(2)} cal, {item.food.brand}
         </Text>
       </View>
       <AntDesign name="pluscircleo" size={24} color="royalblue" />

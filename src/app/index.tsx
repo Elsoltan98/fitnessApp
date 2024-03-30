@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import {
+  ActivityIndicator,
   Button,
   FlatList,
   SafeAreaView,
@@ -11,8 +12,13 @@ import {
 import FoodListItem from "../components/FoodListItem";
 import { foodItems } from "../_mockup/data";
 import { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { GET_SEARCH } from "../../graphql/quieries";
 
-export default function App() {
+export default function Search() {
+  const { data, loading, error } = useQuery(GET_SEARCH, {
+    variables: { ingr: "Pizza" },
+  });
   const [search, setSearch] = useState("");
 
   const performSearch = () => {
@@ -20,6 +26,12 @@ export default function App() {
 
     setSearch("");
   };
+
+  if (loading) {
+    return <ActivityIndicator size="large" />;
+  }
+
+  if (error) return <Text>Faild to fetching data</Text>;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -33,12 +45,8 @@ export default function App() {
         {search && <Button title="Search" onPress={performSearch} />}
 
         <FlatList
-          data={foodItems}
-          renderItem={({ item }) => (
-            <FoodListItem
-              item={{ label: item.label, cal: item.cal, brand: item.brand }}
-            />
-          )}
+          data={data.search.hints}
+          renderItem={({ item }) => <FoodListItem item={item} />}
           contentContainerStyle={{ gap: 5 }}
         />
       </View>
