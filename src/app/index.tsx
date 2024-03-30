@@ -12,24 +12,16 @@ import {
 import FoodListItem from "../components/FoodListItem";
 import { foodItems } from "../_mockup/data";
 import { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GET_SEARCH } from "../../graphql/quieries";
 
 export default function Search() {
-  const { data, loading, error } = useQuery(GET_SEARCH, {
-    variables: { ingr: "Pizza" },
-  });
+  const [runSearch, { data, loading, error }] = useLazyQuery(GET_SEARCH);
   const [search, setSearch] = useState("");
 
   const performSearch = () => {
-    console.warn("Searching for: ", search);
-
-    setSearch("");
+    runSearch({ variables: { ingr: search } });
   };
-
-  if (loading) {
-    return <ActivityIndicator size="large" />;
-  }
 
   if (error) return <Text>Faild to fetching data</Text>;
 
@@ -44,9 +36,11 @@ export default function Search() {
         />
         {search && <Button title="Search" onPress={performSearch} />}
 
+        {loading && <ActivityIndicator />}
         <FlatList
-          data={data.search.hints}
+          data={data ? data.search.hints : []}
           renderItem={({ item }) => <FoodListItem item={item} />}
+          ListEmptyComponent={() => <Text>Search for food</Text>}
           contentContainerStyle={{ gap: 5 }}
         />
       </View>
