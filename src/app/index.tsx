@@ -1,63 +1,49 @@
-import { StatusBar } from "expo-status-bar";
-import {
-  ActivityIndicator,
-  Button,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import FoodListItem from "../components/FoodListItem";
+import { View, Text, Button, FlatList, StyleSheet } from "react-native";
+import React from "react";
+import { Link } from "expo-router";
 import { foodItems } from "../_mockup/data";
-import { useState } from "react";
-import { useLazyQuery } from "@apollo/client";
-import { GET_SEARCH } from "../../graphql/quieries";
+import FoodListItem from "../components/FoodListItem";
 
-export default function Search() {
-  const [runSearch, { data, loading, error }] = useLazyQuery(GET_SEARCH);
-  const [search, setSearch] = useState("");
-
-  const performSearch = () => {
-    runSearch({ variables: { ingr: search } });
-  };
-
-  if (error) return <Text>Faild to fetching data</Text>;
-
+const HomeScreen = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <TextInput
-          value={search}
-          onChangeText={setSearch}
-          placeholder="Search...."
-          style={styles.input}
-        />
-        {search && <Button title="Search" onPress={performSearch} />}
-
-        {loading && <ActivityIndicator />}
-        <FlatList
-          data={data ? data.search.hints : []}
-          renderItem={({ item }) => <FoodListItem item={item} />}
-          ListEmptyComponent={() => <Text>Search for food</Text>}
-          contentContainerStyle={{ gap: 5 }}
-        />
+    <View style={styles.container}>
+      <View style={styles.addContainer}>
+        <Text style={styles.todayText}>Calories</Text>
+        <Text>1770 - 360 = 1692</Text>
       </View>
-    </SafeAreaView>
+      <View style={styles.addContainer}>
+        <Text style={styles.todayText}>Today's logged food</Text>
+        <Link href="/search" asChild>
+          <Button title="Add Food" />
+        </Link>
+      </View>
+      <FlatList
+        data={foodItems}
+        contentContainerStyle={{ gap: 5 }}
+        renderItem={({ item }) => <FoodListItem item={item} />}
+      />
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "white",
     flex: 1,
-    backgroundColor: "#fff",
     padding: 10,
     gap: 10,
   },
-  input: {
-    backgroundColor: "#f2f2f2",
-    padding: 10,
-    borderRadius: 20,
+  addContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  todayText: {
+    fontSize: 18,
+    fontWeight: "500",
+    flex: 1,
+    color: "dimgray",
   },
 });
+
+export default HomeScreen;
