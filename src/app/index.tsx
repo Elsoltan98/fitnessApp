@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import {
   Button,
   FlatList,
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -21,25 +22,27 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        value={search}
-        onChangeText={setSearch}
-        placeholder="Search...."
-        style={styles.input}
-      />
-      {search && <Button title="Search" onPress={performSearch} />}
+    <SafeAreaView style={styles.container}>
+      <View>
+        <TextInput
+          value={search}
+          onChangeText={setSearch}
+          placeholder="Search...."
+          style={styles.input}
+        />
+        {search && <Button title="Search" onPress={performSearch} />}
 
-      <FlatList
-        data={foodItems}
-        renderItem={({ item }) => (
-          <FoodListItem
-            item={{ label: item.label, cal: item.cal, brand: item.brand }}
-          />
-        )}
-        contentContainerStyle={{ gap: 5 }}
-      />
-    </View>
+        <FlatList
+          data={foodItems}
+          renderItem={({ item }) => (
+            <FoodListItem
+              item={{ label: item.label, cal: item.cal, brand: item.brand }}
+            />
+          )}
+          contentContainerStyle={{ gap: 5 }}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -47,7 +50,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    justifyContent: "center",
     padding: 10,
     gap: 10,
   },
