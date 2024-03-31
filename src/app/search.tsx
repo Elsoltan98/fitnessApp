@@ -14,6 +14,7 @@ import { foodItems } from "../_mockup/data";
 import { useState } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { GET_SEARCH } from "../../graphql/quieries";
+import LottieView from "lottie-react-native";
 
 export default function Search() {
   const [runSearch, { data, loading, error }] = useLazyQuery(GET_SEARCH);
@@ -36,7 +37,23 @@ export default function Search() {
         />
         {search && <Button title="Search" onPress={performSearch} />}
 
-        {loading && <ActivityIndicator />}
+        {loading && (
+          <View>
+            <LottieView
+              source={require("./../../assets/Animation.json")}
+              style={[
+                styles.loadingContainer,
+                {
+                  width: "50%",
+                  height: "50%",
+                  alignSelf: "center",
+                },
+              ]}
+              autoPlay
+              loop={loading}
+            />
+          </View>
+        )}
         <FlatList
           data={data ? data.search.hints : []}
           renderItem={({ item }) => <FoodListItem item={item} />}
@@ -60,4 +77,5 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
   },
+  loadingContainer: {},
 });
